@@ -1,0 +1,44 @@
+---
+- name: download...
+  become: yes
+  become_user: root
+  get_url:
+    url: '{{teamcity_tgz_url}}'
+    dest: /tmp/{{teamcity_tgz}}
+    mode: 0644
+
+- name: create versioned install directory
+  become: yes
+  become_user: root
+  file:
+    path: '{{teamcity_install_versioned_dir}}'
+    state: directory
+    mode: 0755
+
+- name: unarchive...
+  become: yes
+  become_user: root
+  unarchive:
+    remote_src: yes
+    src: /tmp/{{teamcity_tgz}}
+    dest: '{{teamcity_install_versioned_dir}}'
+    creates: '{{teamcity_install_dir}}'
+
+- name: link...
+  become: yes
+  become_user: root
+  file:
+    src: '{{teamcity_install_dir}}'
+    dest: '{{teamcity_link_dir}}'
+    state: link
+
+- name: add to login shell path...
+  become: yes
+  become_user: root
+  with_items:
+    - f: TeamCity.sh
+      d: /etc/profile.d
+  template:
+    src: '{{item.f}}.j2'
+    dest: '{{item.d}}/{{item.f}}'
+    mode: '{{item.m|default("0644")}}'

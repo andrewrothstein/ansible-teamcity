@@ -1,0 +1,6 @@
+---
+# defaults file for teamcity
+teamcity_ver: '2017.1.3'
+teamcity_mirror: https://download-cf.jetbrains.com/teamcity
+teamcity_checksum: d277bfc9710fdd9f547216d4098bfa9f450bfcacd65d3cb81d78a297a892f520
+teamcity_parent_install_dir: /usr/local
