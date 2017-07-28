@@ -42,3 +42,11 @@
     src: '{{item.f}}.j2'
     dest: '{{item.d}}/{{item.f}}'
     mode: '{{item.m|default("0644")}}'
+
+- name: cleanup
+  become: yes
+  become_user: root
+  when: teamcity_cleanup
+  file:
+    path: /tmp/{{teamcity_tgz}}
+    state: absent
