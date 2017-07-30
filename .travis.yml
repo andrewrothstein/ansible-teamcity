@@ -28,7 +28,6 @@ env:
   - OS=fedora_25
   - OS=fedora_26
   - OS=debian_jessie
-  - OS=ubuntu_trusty
   - OS=ubuntu_xenial
 
 before_install:
