@@ -1,28 +1,43 @@
 ---
-- name: download...
+- name: check for teamcity installation
   become: yes
-  become_user: root
-  get_url:
-    url: '{{teamcity_tgz_url}}'
-    dest: /tmp/{{teamcity_tgz}}
-    mode: 0644
-
-- name: create versioned install directory
-  become: yes
-  become_user: root
-  file:
+  stat:
     path: '{{teamcity_install_versioned_dir}}'
-    state: directory
-    mode: 0755
+  when_changed: false
+  register: teamcity_binary
+- when: not teamcity_binary.stat.exists
+  block:
+    - name: create versioned install directory
+      become: yes
+      become_user: root
+      file:
+        path: '{{teamcity_install_versioned_dir}}'
+        state: directory
+        mode: 0755
+        
+    - name: download...
+      become: yes
+      become_user: root
+      get_url:
+        url: '{{teamcity_tgz_url}}'
+        dest: /tmp/{{teamcity_tgz}}
+        mode: 0644
 
-- name: unarchive...
-  become: yes
-  become_user: root
-  unarchive:
-    remote_src: yes
-    src: /tmp/{{teamcity_tgz}}
-    dest: '{{teamcity_install_versioned_dir}}'
-    creates: '{{teamcity_install_dir}}'
+    - name: unarchive...
+      become: yes
+      become_user: root
+      unarchive:
+        remote_src: yes
+        src: /tmp/{{teamcity_tgz}}
+        dest: '{{teamcity_install_versioned_dir}}'
+        creates: '{{teamcity_install_dir}}'
+  always:
+    - name: cleanup
+      become: yes
+      become_user: root
+      file:
+        path: /tmp/{{teamcity_tgz}}
+        state: absent
 
 - name: link...
   become: yes
@@ -42,11 +57,3 @@
     src: '{{item.f}}.j2'
     dest: '{{item.d}}/{{item.f}}'
     mode: '{{item.m|default("0644")}}'
-
-- name: cleanup
-  become: yes
-  become_user: root
-  when: teamcity_cleanup
-  file:
-    path: /tmp/{{teamcity_tgz}}
-    state: absent
