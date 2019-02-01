@@ -2,8 +2,8 @@
 - name: check for teamcity installation
   become: yes
   stat:
-    path: '{{teamcity_install_versioned_dir}}'
-  when_changed: false
+    path: '{{ teamcity_install_versioned_dir }}'
+  changed_when: false
   register: teamcity_binary
 - when: not teamcity_binary.stat.exists
   block:
@@ -11,16 +11,16 @@
       become: yes
       become_user: root
       file:
-        path: '{{teamcity_install_versioned_dir}}'
+        path: '{{ teamcity_install_versioned_dir }}'
         state: directory
         mode: 0755
-        
+
     - name: download...
       become: yes
       become_user: root
       get_url:
-        url: '{{teamcity_tgz_url}}'
-        dest: /tmp/{{teamcity_tgz}}
+        url: '{{ teamcity_tgz_url }}'
+        dest: /tmp/{{ teamcity_tgz }}
         mode: 0644
 
     - name: unarchive...
@@ -28,23 +28,23 @@
       become_user: root
       unarchive:
         remote_src: yes
-        src: /tmp/{{teamcity_tgz}}
-        dest: '{{teamcity_install_versioned_dir}}'
-        creates: '{{teamcity_install_dir}}'
+        src: /tmp/{{ teamcity_tgz }}
+        dest: '{{ teamcity_install_versioned_dir }}'
+        creates: '{{ teamcity_install_dir }}'
   always:
     - name: cleanup
       become: yes
       become_user: root
       file:
-        path: /tmp/{{teamcity_tgz}}
+        path: /tmp/{{ teamcity_tgz }}
         state: absent
 
 - name: link...
   become: yes
   become_user: root
   file:
-    src: '{{teamcity_install_dir}}'
-    dest: '{{teamcity_link_dir}}'
+    src: '{{ teamcity_install_dir }}'
+    dest: '{{ teamcity_link_dir }}'
     state: link
 
 - name: add to login shell path...
@@ -54,6 +54,6 @@
     - f: TeamCity.sh
       d: /etc/profile.d
   template:
-    src: '{{item.f}}.j2'
-    dest: '{{item.d}}/{{item.f}}'
-    mode: '{{item.m|default("0644")}}'
+    src: '{{ item.f }}.j2'
+    dest: '{{ item.d }}/{{ item.f }}'
+    mode: '{{ item.m|default("0644") }}'

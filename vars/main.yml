@@ -1,9 +1,9 @@
 ---
 # vars file for teamcity
-teamcity_name: TeamCity-{{teamcity_ver}}
-teamcity_tgz: '{{teamcity_name}}.tar.gz'
-teamcity_tgz_url: '{{teamcity_mirror}}/{{teamcity_tgz}}'
-teamcity_checksum: '{{teamcity_checksums[teamcity_ver]}}'
-teamcity_install_versioned_dir: '{{teamcity_parent_install_dir}}/{{teamcity_name}}'
-teamcity_install_dir: '{{teamcity_install_versioned_dir}}/TeamCity'
-teamcity_link_dir: '{{teamcity_parent_install_dir}}/TeamCity'
+teamcity_name: TeamCity-{{ teamcity_ver }}
+teamcity_tgz: '{{ teamcity_name }}.tar.gz'
+teamcity_tgz_url: '{{ teamcity_mirror }}/{{ teamcity_tgz }}'
+teamcity_checksum: '{{ teamcity_checksums[teamcity_ver] }}'
+teamcity_install_versioned_dir: '{{ teamcity_parent_install_dir }}/{{ teamcity_name }}'
+teamcity_install_dir: '{{ teamcity_install_versioned_dir }}/TeamCity'
+teamcity_link_dir: '{{ teamcity_parent_install_dir }}/TeamCity'
