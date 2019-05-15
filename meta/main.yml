@@ -1,32 +1,30 @@
----
+dependencies:
+- role: andrewrothstein.unarchive-deps
+  version: v1.0.10
+- role: andrewrothstein.openjdk
+  version: v1.0.0
 galaxy_info:
   author: Andrew Rothstein
-  description: installs TeamCity
   company: PointState Capital
+  description: installs TeamCity
+  galaxy_tags:
+  - development
   license:
-    - MIT
+  - MIT
   min_ansible_version: 2.0
   platforms:
-    - name: EL
-      versions:
-        - all
-    - name: Fedora
-      versions:
-        - all
-    - name: Ubuntu
-      versions:
-        - xenial
-    - name: Alpine
-      versions:
-        - all
-    - name: Debian
-      versions:
-        - jessie
-  galaxy_tags:
-    - development
-
-dependencies:
-  - src: andrewrothstein.unarchive-deps
-    version: v1.0.10
-  - src: andrewrothstein.java-oracle-jdk
-    version: v2.1.2
+  - name: EL
+    versions:
+    - all
+  - name: Fedora
+    versions:
+    - all
+  - name: Ubuntu
+    versions:
+    - xenial
+  - name: Alpine
+    versions:
+    - all
+  - name: Debian
+    versions:
+    - jessie
