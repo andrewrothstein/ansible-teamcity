@@ -1,6 +1,6 @@
 andrewrothstein.teamcity
 =========
-[![Build Status](https://travis-ci.org/andrewrothstein/ansible-teamcity.svg?branch=master)](https://travis-ci.org/andrewrothstein/ansible-teamcity)
+![Build Status](https://github.com/andrewrothstein/ansible-teamcity/actions/workflows/build.yml/badge.svg)
 
 Installs JetBrain's [TeamCity](https://www.jetbrains.com/teamcity/).
 

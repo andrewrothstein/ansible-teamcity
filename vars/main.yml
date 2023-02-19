@@ -2,6 +2,7 @@
 # vars file for teamcity
 teamcity_name: TeamCity-{{ teamcity_ver }}
 teamcity_tgz: '{{ teamcity_name }}.tar.gz'
+teamcity_tmp_tgz: '{{ teamcity_tmpdir | default("/tmp") }}/{{ teamcity_tgz }}'
 teamcity_tgz_url: '{{ teamcity_mirror }}/{{ teamcity_tgz }}'
 teamcity_checksum: '{{ teamcity_checksums[teamcity_ver] }}'
 teamcity_install_versioned_dir: '{{ teamcity_parent_install_dir }}/{{ teamcity_name }}'

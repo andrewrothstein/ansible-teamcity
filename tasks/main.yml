@@ -1,46 +1,52 @@
 ---
-- name: check for teamcity installation
-  become: yes
+- include_role:
+    name: andrewrothstein.temurin
+- include_role:
+    name: andrewrothstein.temurin
+  vars:
+    openjdk_app: jre
+- name: check for installation in {{ teamcity_install_versioned_dir }}
+  become: true
   stat:
     path: '{{ teamcity_install_versioned_dir }}'
   changed_when: false
   register: teamcity_binary
 - when: not teamcity_binary.stat.exists
   block:
-    - name: create versioned install directory
-      become: yes
+    - name: downloading {{ teamcity_tgz_url }} to {{ teamcity_tmp_tgz }}
+      become: true
+      become_user: root
+      get_url:
+        url: '{{ teamcity_tgz_url }}'
+        dest: '{{ teamcity_tmp_tgz }}'
+        mode: 0644
+
+    - name: mkdir {{ teamcity_install_versioned_dir }}
+      become: true
       become_user: root
       file:
         path: '{{ teamcity_install_versioned_dir }}'
         state: directory
         mode: 0755
 
-    - name: download...
-      become: yes
-      become_user: root
-      get_url:
-        url: '{{ teamcity_tgz_url }}'
-        dest: /tmp/{{ teamcity_tgz }}
-        mode: 0644
-
-    - name: unarchive...
-      become: yes
+    - name: unarchiving {{ teamcity_tmp_tgz }} to {{ teamcity_install_versioned_dir }}
+      become: true
       become_user: root
       unarchive:
-        remote_src: yes
-        src: /tmp/{{ teamcity_tgz }}
+        remote_src: true
+        src: '{{ teamcity_tmp_tgz }}'
         dest: '{{ teamcity_install_versioned_dir }}'
         creates: '{{ teamcity_install_dir }}'
   always:
-    - name: cleanup
-      become: yes
+    - name: rm {{ teamcity_tmp_tgz }}
+      become: true
       become_user: root
       file:
-        path: /tmp/{{ teamcity_tgz }}
+        path: '{{ teamcity_tmp_tgz }}'
         state: absent
 
-- name: link...
-  become: yes
+- name: linking {{ teamcity_link_dir }} to {{ teamcity_install_dir }}
+  become: true
   become_user: root
   file:
     src: '{{ teamcity_install_dir }}'
@@ -48,7 +54,7 @@
     state: link
 
 - name: add to login shell path...
-  become: yes
+  become: true
   become_user: root
   with_items:
     - f: TeamCity.sh
@@ -56,4 +62,4 @@
   template:
     src: '{{ item.f }}.j2'
     dest: '{{ item.d }}/{{ item.f }}'
-    mode: '{{ item.m|default("0644") }}'
+    mode: '{{ item.m | default("0644") }}'
