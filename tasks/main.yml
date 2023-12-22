@@ -1,65 +1,65 @@
 ---
-- include_role:
+- ansible.builtin.include_role:
     name: andrewrothstein.temurin
-- include_role:
+- ansible.builtin.include_role:
     name: andrewrothstein.temurin
   vars:
     openjdk_app: jre
-- name: check for installation in {{ teamcity_install_versioned_dir }}
+- name: Check for installation in {{ teamcity_install_versioned_dir }}
   become: true
-  stat:
+  ansible.builtin.stat:
     path: '{{ teamcity_install_versioned_dir }}'
   changed_when: false
   register: teamcity_binary
 - when: not teamcity_binary.stat.exists
   block:
-    - name: downloading {{ teamcity_tgz_url }} to {{ teamcity_tmp_tgz }}
+    - name: Downloading {{ teamcity_tgz_url }} to {{ teamcity_tmp_tgz }}
       become: true
       become_user: root
-      get_url:
+      ansible.builtin.get_url:
         url: '{{ teamcity_tgz_url }}'
         dest: '{{ teamcity_tmp_tgz }}'
         mode: 0644
 
-    - name: mkdir {{ teamcity_install_versioned_dir }}
+    - name: Mkdir {{ teamcity_install_versioned_dir }}
       become: true
       become_user: root
-      file:
+      ansible.builtin.file:
         path: '{{ teamcity_install_versioned_dir }}'
         state: directory
-        mode: 0755
+        mode: '755'
 
-    - name: unarchiving {{ teamcity_tmp_tgz }} to {{ teamcity_install_versioned_dir }}
+    - name: Unarchiving {{ teamcity_tmp_tgz }} to {{ teamcity_install_versioned_dir }}
       become: true
       become_user: root
-      unarchive:
+      ansible.builtin.unarchive:
         remote_src: true
         src: '{{ teamcity_tmp_tgz }}'
         dest: '{{ teamcity_install_versioned_dir }}'
         creates: '{{ teamcity_install_dir }}'
   always:
-    - name: rm {{ teamcity_tmp_tgz }}
+    - name: Rm {{ teamcity_tmp_tgz }}
       become: true
       become_user: root
-      file:
+      ansible.builtin.file:
         path: '{{ teamcity_tmp_tgz }}'
         state: absent
 
-- name: linking {{ teamcity_link_dir }} to {{ teamcity_install_dir }}
+- name: Linking {{ teamcity_link_dir }} to {{ teamcity_install_dir }}
   become: true
   become_user: root
-  file:
+  ansible.builtin.file:
     src: '{{ teamcity_install_dir }}'
     dest: '{{ teamcity_link_dir }}'
     state: link
 
-- name: add to login shell path...
+- name: Add to login shell path...
   become: true
   become_user: root
   with_items:
     - f: TeamCity.sh
       d: /etc/profile.d
-  template:
+  ansible.builtin.template:
     src: '{{ item.f }}.j2'
     dest: '{{ item.d }}/{{ item.f }}'
-    mode: '{{ item.m | default("0644") }}'
+    mode: '{{ item.m | default("644") }}'
