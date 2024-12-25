@@ -11,4 +11,4 @@ dl_ver() {
     printf "  '%s': sha256:%s\n" $ver `curl -sSL $url | awk '{print $1}'`
 }
 
-dl_ver ${1:-2023.11.1}
+dl_ver ${1:-2024.12}

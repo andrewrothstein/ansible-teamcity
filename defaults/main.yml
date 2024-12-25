@@ -1,6 +1,6 @@
 ---
 # defaults file for teamcity
-teamcity_ver: '2023.11.1'
+teamcity_ver: '2024.12'
 teamcity_mirror: https://download-cf.jetbrains.com/teamcity
 teamcity_parent_install_dir: /usr/local
 teamcity_checksum:
@@ -22,3 +22,5 @@ teamcity_checksum:
   '2022.10.2': sha256:609098da4a2b41522a23ce81589858390d7dd250211ab28f567e8d6f1adcb3ba
   # https://download.jetbrains.com/teamcity/TeamCity-2023.11.1.tar.gz.sha256
   '2023.11.1': sha256:d529ffbbb7f33e669e87f3c525d807a2e0ce8385c679060e20a3cce03d8c2a9f
+  # https://download.jetbrains.com/teamcity/TeamCity-2024.12.tar.gz.sha256
+  '2024.12': sha256:49b67b7f8ef04b7381816bb5929202f46575f1c74b16e4c5726a156893e20021
